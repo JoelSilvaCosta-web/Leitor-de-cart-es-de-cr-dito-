@@ -1,0 +1,46 @@
+function descobrirTipoCartao(numeroCartao) {
+  // Remove espaços e hífens do número do cartão
+  const numeroLimpo = numeroCartao.replace(/[\s-]/g, '');
+
+  // Valida se o número contém apenas dígitos
+  if (!/^\d+$/.test(numeroLimpo)) {
+    return "Número de cartão inválido: contém caracteres não numéricos.";
+  }
+
+  const primeiroDigito = parseInt(numeroLimpo.charAt(0));
+  const doisPrimeirosDigitos = parseInt(numeroLimpo.substring(0, 2));
+  const quatroPrimeirosDigitos = parseInt(numeroLimpo.substring(0, 4));
+
+  const tiposDeCartao = [
+    { tipo: "Visa", regex: /^4\d{12,15}$/ },
+    { tipo: "Mastercard", regex: /^(5[1-5]|222[1-9]|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)\d{12}$/ },
+    { tipo: "American Express", regex: /^(34|37)\d{13}$/ },
+    { tipo: "Diners Club", regex: /^(30[0-5]|36)\d{12}$/ },
+    { tipo: "Discover", regex: /^(6011|65\d{2}|64[4-9]\d)\d{12,15}$/ },
+    { tipo: "JCB", regex: /^(352[89]|35[3-8]\d)\d{13}$/ },
+    { tipo: "Maestro", regex: /^(5018|5020|5038|5893|6304|6759|676[1-3])\d{8,15}$/ },
+    { tipo: "UnionPay", regex: /^(62|88)\d{14,17}$/ },
+    { tipo: "Hipercard", regex: /^(606282|637095|637568|637599|637612)\d{10,16}$/ },
+    { tipo: "Elo", regex: /^((401178|401179|431274|438935|451416|457393|457631|457632|504175|627780|636360|636368)\d{12})|((506699|5067[0-8]\d|5090\d{2}|636297)\d{12,15})|((5078\d{2}|4576\d{2})\d{13})$/ }
+  ];
+
+  for (const cartao of tiposDeCartao) {
+    if (cartao.regex.test(numeroLimpo)) {
+      return `O cartão de crédito é do tipo: ${cartao.tipo}`;
+    }
+  }
+
+  return "Tipo de cartão não identificado.";
+}
+
+// Exemplos de uso:
+console.log(descobrirTipoCartao("4123456789012345")); // Visa
+console.log(descobrirTipoCartao("5123-4567-8901-2345")); // Mastercard
+console.log(descobrirTipoCartao("341234567890123")); // American Express
+console.log(descobrirTipoCartao("6011123456789012")); // Discover
+console.log(descobrirTipoCartao("35281234567890123")); // JCB
+console.log(descobrirTipoCartao("622123456789012345")); // UnionPay
+console.log(descobrirTipoCartao("606282123456789012")); // Hipercard
+console.log(descobrirTipoCartao("4011781234567890")); // Elo
+console.log(descobrirTipoCartao("9876543210")); // Tipo de cartão não identificado.
+console.log(descobrirTipoCartao("4123-ABC-5678")); // Número de cartão inválido: contém caracteres não numéricos.
